@@ -11,7 +11,7 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
 
 # Example schemas (replace with your own):
@@ -22,7 +22,7 @@ class User(BaseModel):
     Collection name: "user" (lowercase of class name)
     """
     name: str = Field(..., description="Full name")
-    email: str = Field(..., description="Email address")
+    email: EmailStr = Field(..., description="Email address")
     address: str = Field(..., description="Address")
     age: Optional[int] = Field(None, ge=0, le=120, description="Age in years")
     is_active: bool = Field(True, description="Whether user is active")
@@ -40,6 +40,31 @@ class Product(BaseModel):
 
 # Add your own schemas here:
 # --------------------------------------------------
+
+class Application(BaseModel):
+    """Visitor training program application
+    Collection name: "application"
+    """
+    ad_soyad: str = Field(..., description="Başvuru sahibinin adı soyadı")
+    email: EmailStr = Field(..., description="E-posta")
+    telefon: str = Field(..., description="Telefon numarası")
+    kopek_adi: Optional[str] = Field(None, description="Köpeğin adı")
+    kopek_yasi: Optional[int] = Field(None, ge=0, le=25, description="Köpeğin yaşı")
+    kopek_cinsi: Optional[str] = Field(None, description="Köpeğin ırkı/cinsi")
+    egitim_gecmisi: Optional[str] = Field(None, description="Önceki eğitim geçmişi")
+    program: str = Field(..., description="Seçilen eğitim programı: temel, ileri, vip")
+    mesaj: Optional[str] = Field(None, description="Ek not/mesaj")
+
+class Message(BaseModel):
+    """Ziyaretçiden eğitmenlere soru veya iletişim mesajı
+    Collection name: "message"
+    """
+    ad_soyad: str = Field(..., description="Gönderenin adı soyadı")
+    email: EmailStr = Field(..., description="E-posta")
+    telefon: Optional[str] = Field(None, description="Telefon")
+    egitmen_id: Optional[str] = Field(None, description="Hedef eğitmen ID")
+    konu: str = Field(..., description="Konu")
+    mesaj: str = Field(..., description="Mesaj içeriği")
 
 # Note: The Flames database viewer will automatically:
 # 1. Read these schemas from GET /schema endpoint
